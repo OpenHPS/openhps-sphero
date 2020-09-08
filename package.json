@@ -1,6 +1,6 @@
 {
   "name": "@openhps/sphero",
-  "version": "0.1.0-alpha.1",
+  "version": "0.1.0-alpha.2",
   "description": "Open Hybrid Positioning System - Sphero component",
   "author": "Maxim Van de Wynckel",
   "license": "Apache-2.0",
@@ -38,13 +38,11 @@
   ],
   "dependencies": {
     "@openhps/core": "0.1.0-alpha.77",
-    "dotenv": "^8.2.0",
     "reflect-metadata": ">=0.1.13",
     "spherov2.js-server": "file://./lib/server/lib",
     "spherov2.js-web": "file://./lib/web"
   },
   "devDependencies": {
-    "@types/web-bluetooth": "0.0.8",
     "@babel/cli": "^7.11.5",
     "@babel/core": "^7.11.5",
     "@babel/node": "^7.10.5",
