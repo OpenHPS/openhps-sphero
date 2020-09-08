@@ -4,6 +4,12 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building ...'
+                try {
+                    sh 'git rm --cached ./lib/server'
+                } catch (ex) {
+
+                }
+                sh 'git submodule update --init --recursive'
                 sh 'npm install'
                 sh 'npm run clean'
                 sh 'npm run build:typescript'
