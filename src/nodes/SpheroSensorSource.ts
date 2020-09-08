@@ -41,7 +41,7 @@ export class SpheroSensorSource<Out extends SpheroDataFrame, T extends RollableT
             this.referenceSpace = new ReferenceSpace((this.graph as Model).referenceSpace);
             const spheroObject = this.source as SpheroDataObject<T>;
             spheroObject.toy
-                .configureSensorStream()
+                .configureSensorStream(this.options.interval)
                 .then(() => {
                     spheroObject.toy.on(Event.onSensor, this._onSensorEvent.bind(this));
                     resolve();

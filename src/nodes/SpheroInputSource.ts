@@ -73,7 +73,6 @@ export class SpheroInputSource<Out extends SpheroDataFrame, T extends RollableTo
         flags: DriveFlag[] = [],
     ): Promise<void> {
         return new Promise((resolve, reject) => {
-            const drive = true;
             setTimeout(() => {
                 clearInterval(timer);
                 this.roll(0, heading, flags)
