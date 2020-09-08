@@ -29,9 +29,13 @@ module.exports = [{
       },
     }),
   ],
+  resolve: {
+    alias: {
+      "spherov2.js-server": "spherov2.js-web"
+    }
+  },
   externals: {
     "@openhps/core": "@openhps/core",
-    "spherov2.js-server": "spherov2.js-web"
   },
 },{
   mode: 'production',
@@ -62,9 +66,13 @@ module.exports = [{
           },
       }),
   ],
+  resolve: {
+    alias: {
+      "spherov2.js-server": "spherov2.js-web"
+    }
+  },
   externals: {
-    "@openhps/core": "@openhps/core",
-    "spherov2.js-server": "spherov2.js-web"
+    "@openhps/core": "@openhps/core"
   },
   output: {
     path: path.resolve(__dirname, 'dist'),
