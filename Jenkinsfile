@@ -4,7 +4,6 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Building ...'
-                sh 'git submodule update --init --recursive'
                 sh 'npm install'
                 sh 'npm run clean'
                 sh 'npm run build:typescript'
