@@ -1,3 +1,3 @@
 [submodule "lib/server"]
 	path = lib/server
-	url = https://github.com/igbopie/spherov2.js
+	url = https://github.com/Maximvdw/spherov2.js.git
