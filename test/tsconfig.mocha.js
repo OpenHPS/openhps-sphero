@@ -1,11 +1,3 @@
-require("@babel/register")({
-    presets: ["@babel/preset-env"],
-    plugins: [
-        ["@babel/plugin-transform-runtime"]
-    ],
-    only: ['node_modules/three/src/math/*.js', 'node_modules/@openhps/**/*.js'],
-    cache: true,
-});
 require("ts-node").register({
     compilerOptions: {
         module: "commonjs",

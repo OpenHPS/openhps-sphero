@@ -12,6 +12,7 @@ import {
     LengthUnit,
     SourceNodeOptions,
     LinearVelocityUnit,
+    Acceleration,
 } from '@openhps/core';
 import { SpheroDataObject, SpheroDataFrame } from '../data';
 import { RollableToy, Event } from 'spherov2.js-server';
@@ -77,6 +78,12 @@ export class SpheroSensorSource<Out extends SpheroDataFrame, T extends RollableT
             0,
             LinearVelocityUnit.CENTIMETER_PER_SECOND,
         );
+        position.velocity.angular = new AngularVelocity(
+            event.gyro.filtered.x,
+            event.gyro.filtered.y,
+            event.gyro.filtered.z,
+            AngularVelocityUnit.DEGREE_PER_SECOND,
+        );
         position.unit = LengthUnit.CENTIMETER;
         position.x = event.locator.position.x;
         position.y = event.locator.position.y;
@@ -88,11 +95,13 @@ export class SpheroSensorSource<Out extends SpheroDataFrame, T extends RollableT
         });
         spheroObject.setPosition(position, this.referenceSpace);
         const frame = new SpheroDataFrame(spheroObject);
-        frame.angularVelocity = new AngularVelocity(
-            event.gyro.filtered.x,
-            event.gyro.filtered.y,
-            event.gyro.filtered.z,
-            AngularVelocityUnit.DEGREE_PER_SECOND,
+        frame.angularVelocity = position.velocity.angular.clone();
+        frame.linearVelocity = position.velocity.linear.clone();
+        frame.relativeOrientation = position.orientation.clone();
+        frame.linearAcceleration = new Acceleration(
+            event.accelerometer.filtered.x,
+            event.accelerometer.filtered.y,
+            event.accelerometer.filtered.z,
         );
         const pushPromises: Array<Promise<void>> = [];
         this.outputNodes.forEach((node) => {
