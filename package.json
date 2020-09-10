@@ -25,16 +25,16 @@
     "cover": "nyc mocha && nyc report --reporter=cobertura",
     "lint": "eslint src/**",
     "clean": "shx rm -rf ./dist && shx rm -rf ./docs",
-    "build": "npm run clean && npm-run-all --parallel build:typescript && npm run build:webpack",
+    "build": "npm run clean && npm-run-all --parallel build:typescript build:lib && npm run build:webpack",
     "build:typescript": "tsc",
+    "build:lib": "npm-run-all --parallel build:lib:*",
+    "build:lib:web": "cd ./lib/web && npm install && tsc",
+    "build:lib:server": "cd ./lib/server/lib && npm install && tsc",
     "build:typedoc": "typedoc --exclude **/_internal/**/* --excludePrivate --hideGenerator --out docs src",
     "build:webpack": "webpack",
     "publish:development": "standard-version --prerelease alpha -m 'chore(alpha): %s' --author='ci <ci@openhps.org>' && npm publish --tag dev",
     "publish:beta": "standard-version --prerelease beta -m 'chore(beta): %s' --author='ci <ci@openhps.org>' && npm publish --tag beta",
-    "publish:release": "standard-version -m 'chore(release): %s' --author='ci <ci@openhps.org>' && npm publish --tag latest",
-    "preinstall": "npm run preinstall-server && npm run preinstall-web",
-    "preinstall-server": "cd ./lib/server/lib && npm install && tsc",
-    "preinstall-web": "cd ./lib/web && npm install && tsc"
+    "publish:release": "standard-version -m 'chore(release): %s' --author='ci <ci@openhps.org>' && npm publish --tag latest"
   },
   "keywords": [
     "openhps",
@@ -72,7 +72,6 @@
     "typedoc": "^0.19.0",
     "typescript": "^4.0.2",
     "webpack": "^4.44.1",
-    "webpack-auto-inject-version": "^1.2.2",
     "webpack-cli": "^3.3.12"
   },
   "nyc": {

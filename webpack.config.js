@@ -1,5 +1,4 @@
 const TerserPlugin = require('terser-webpack-plugin');
-const WebpackAutoInject = require('webpack-auto-inject-version');
 
 const path = require('path');
 
@@ -15,20 +14,6 @@ module.exports = [{
     umdNamedDefine: true,
     globalObject: `(typeof self !== 'undefined' ? self : this)`,
   },
-  plugins: [
-    new WebpackAutoInject({
-      SHORT: '@openhps/sphero',
-      components: {
-        AutoIncreaseVersion: false,
-      },
-      componentsOptions: {
-        InjectAsComment: {
-          tag: 'Version: {version} - {date}',
-          dateFormat: 'isoDate',
-        },
-      },
-    }),
-  ],
   resolve: {
     alias: {
       "spherov2.js-server": "spherov2.js-web"
@@ -52,20 +37,6 @@ module.exports = [{
       })
     ]
   },
-  plugins: [
-      new WebpackAutoInject({
-          SHORT: '@openhps/sphero',
-          components: {
-            AutoIncreaseVersion: false,
-          },
-          componentsOptions: {
-            InjectAsComment: {
-              tag: 'Version: {version} - {date}',
-              dateFormat: 'isoDate',
-            },
-          },
-      }),
-  ],
   resolve: {
     alias: {
       "spherov2.js-server": "spherov2.js-web"
