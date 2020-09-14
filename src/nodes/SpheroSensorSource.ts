@@ -15,8 +15,8 @@ import {
     Acceleration,
 } from '@openhps/core';
 import { SpheroDataObject, SpheroDataFrame } from '../data';
-import { RollableToy, Event } from 'spherov2.js-server';
-import { ISensorResponse } from 'spherov2.js-web';
+import { RollableToy, Event } from '../../lib/server/lib/dist';
+import { ISensorResponse } from '../../lib/web/dist';
 
 export class SpheroSensorSource<Out extends SpheroDataFrame, T extends RollableToy = RollableToy> extends SourceNode<
     Out

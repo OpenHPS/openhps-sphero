@@ -16,8 +16,8 @@ module.exports = [{
   },
   resolve: {
     alias: {
-      "spherov2.js-server": path.resolve(__dirname, 'lib/web/dist'),
-      "spherov2.js-web": path.resolve(__dirname, 'lib/web/dist')
+      "../../../lib/server/dist": "../../../lib/web/dist",
+      "../../lib/server/dist": "../../lib/web/dist",
     }
   },
   externals: {
