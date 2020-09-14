@@ -12,7 +12,12 @@
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "allowJs": true,
-        "skipLibCheck": true
+        "skipLibCheck": true,
+        "baseUrl": ".",
+        "paths": {
+            "spherov2.js-server": ["lib/server/lib/dist"],
+            "spherov2.js-web": ["lib/web/dist"]
+        }
     },
     "include": [
         "src/**/*",

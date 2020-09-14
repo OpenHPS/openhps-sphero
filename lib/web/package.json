@@ -6,6 +6,9 @@
   "scripts": {
     "tsc": "tsc"
   },
+  "files": [
+    "dist/**/*"
+  ],
   "author": "igbopie",
   "license": "ISC",
   "devDependencies": {
