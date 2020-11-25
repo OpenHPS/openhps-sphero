@@ -18,9 +18,10 @@ import { SpheroDataObject, SpheroDataFrame } from '../data';
 import { RollableToy, Event } from 'spherov2.js-server';
 import { ISensorResponse } from 'spherov2.js-web';
 
-export class SpheroSensorSource<Out extends SpheroDataFrame, T extends RollableToy = RollableToy> extends SourceNode<
-    Out
-> {
+export class SpheroSensorSource<
+    Out extends SpheroDataFrame,
+    T extends RollableToy = RollableToy
+> extends SourceNode<Out> {
     public referenceSpace: ReferenceSpace;
     private _calibrated = false;
     protected options: SpheroSensorOptions;

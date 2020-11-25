@@ -5,8 +5,8 @@ import { Core, SpheroMini, Scanner } from 'spherov2.js-server';
 export class SpheroDataObject<T extends Core> extends DataObject {
     public toy: T;
 
-    constructor(toy: T) {
-        super();
+    constructor(toy: T, uid?: string, displayName?: string) {
+        super(uid, displayName);
         this.toy = toy;
     }
 

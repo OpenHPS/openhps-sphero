@@ -3,9 +3,10 @@ import { SpheroDataObject, SpheroDataFrame } from '../data';
 import { RollableToy } from 'spherov2.js-server';
 import { DriveFlag } from 'spherov2.js-web';
 
-export class SpheroInputSource<Out extends SpheroDataFrame, T extends RollableToy = RollableToy> extends SourceNode<
-    Out
-> {
+export class SpheroInputSource<
+    Out extends SpheroDataFrame,
+    T extends RollableToy = RollableToy
+> extends SourceNode<Out> {
     constructor(source?: SpheroDataObject<T>) {
         super(source);
         if (!source) {
@@ -41,6 +42,8 @@ export class SpheroInputSource<Out extends SpheroDataFrame, T extends RollableTo
             const position = spheroObject.getPosition();
             position.orientation = Quaternion.fromEuler({ yaw: heading, pitch: 0, roll: 0, unit: AngleUnit.DEGREE });
             position.velocity.linear = new LinearVelocity(
+                // Sphero Mini top speed is 1m/s
+                // https://support.sphero.com/article/6drb2qggx4-sphero-mini-faq#:~:text=How%20fast%20is%20Sphero%20Mini,of%201%20meter%20per%20second.
                 (1.0 / 255) * speed,
                 0,
                 0,
