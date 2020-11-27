@@ -6,6 +6,7 @@ import {
     TimeUnit,
     LinearVelocityUnit,
     Absolute2DPosition,
+    TimeService,
 } from '@openhps/core';
 import { SpheroDataObject, SpheroDataFrame } from '../data';
 import { RollableToy } from '../../lib/server/lib/dist';
@@ -48,7 +49,7 @@ export class SpheroInputSource<
         return new Promise((resolve, reject) => {
             const spheroObject = this.source as SpheroDataObject<T>;
             const position = spheroObject.getPosition() || new Absolute2DPosition(0, 0);
-            position.timestamp = Date.now();
+            position.timestamp = TimeService.now();
             position.orientation = Quaternion.fromEuler({ yaw: heading, pitch: 0, roll: 0, unit: AngleUnit.DEGREE });
             position.velocity.linear = new LinearVelocity(
                 // Sphero Mini top speed is 1m/s
@@ -72,7 +73,9 @@ export class SpheroInputSource<
                     return Promise.all(pushPromises);
                 })
                 .then(() => {
-                    resolve();
+                    setTimeout(() => {
+                        resolve();
+                    }, 10);
                 })
                 .catch(reject);
         });
