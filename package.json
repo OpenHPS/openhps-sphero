@@ -42,7 +42,7 @@
     "sphero"
   ],
   "dependencies": {
-    "@openhps/core": "0.1.0-alpha.85",
+    "@openhps/core": ">=0.1.0-alpha.86",
     "reflect-metadata": ">=0.1.13"
   },
   "devDependencies": {
