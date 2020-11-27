@@ -62,9 +62,9 @@ export class SpheroSensorSource<
             // Start orientation
             this.referenceSpace.rotation(
                 Quaternion.fromEuler({
-                    yaw: event.angles.yaw,
-                    pitch: event.angles.pitch,
-                    roll: event.angles.roll,
+                    yaw: -event.angles.yaw,
+                    pitch: -event.angles.pitch,
+                    roll: -event.angles.roll,
                     unit: AngleUnit.DEGREE,
                 }),
             );
@@ -75,7 +75,7 @@ export class SpheroSensorSource<
         }
 
         const spheroObject = this.source as SpheroDataObject<T>;
-        const position = spheroObject.getPosition() as Absolute2DPosition;
+        const position = (spheroObject.getPosition() as Absolute2DPosition) || new Absolute2DPosition(0, 0);
         if (this.options.sensors.includes(SpheroSensor.VELOCITY)) {
             position.velocity.linear = new LinearVelocity(
                 event.locator.velocity.x,
