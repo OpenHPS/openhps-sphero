@@ -1,7 +1,7 @@
 import { SourceNode, Quaternion, AngleUnit, LinearVelocity, TimeUnit, LinearVelocityUnit } from '@openhps/core';
 import { SpheroDataObject, SpheroDataFrame } from '../data';
-import { RollableToy } from 'spherov2.js-server';
-import { DriveFlag } from 'spherov2.js-web';
+import { RollableToy } from '../../lib/server/lib/dist';
+import { DriveFlag } from '../../lib/web/dist';
 
 export class SpheroInputSource<
     Out extends SpheroDataFrame,
@@ -75,21 +75,22 @@ export class SpheroInputSource<
         timeUnit: TimeUnit,
         flags: DriveFlag[] = [],
     ): Promise<void> {
-        return new Promise((resolve, reject) => {
-            setTimeout(() => {
-                clearInterval(timer);
-                this.roll(0, heading, flags)
-                    .then(() => {
-                        resolve();
-                    })
-                    .catch((ex) => {
-                        reject(ex);
-                    });
-            }, timeUnit.convert(time, TimeUnit.MILLISECOND));
+        // eslint-disable-next-line
+        return new Promise(async (resolve, reject) => {
+            let driving = true;
+            setTimeout(() => (driving = false), timeUnit.convert(time, TimeUnit.MILLISECOND));
 
-            const timer = setInterval(() => {
-                Promise.resolve(this.roll(speed, heading, flags));
-            }, 50);
+            while (driving) {
+                await this.roll(speed, heading, flags);
+            }
+
+            this.roll(0, heading, flags)
+                .then(() => {
+                    resolve();
+                })
+                .catch((ex) => {
+                    reject(ex);
+                });
         });
     }
 }

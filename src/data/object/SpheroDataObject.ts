@@ -1,5 +1,5 @@
 import { DataObject, SerializableObject, Absolute3DPosition } from '@openhps/core';
-import { Core, SpheroMini, Scanner } from 'spherov2.js-server';
+import { Core, SpheroMini, Scanner } from '../../../lib/server/lib/dist';
 
 @SerializableObject()
 export class SpheroDataObject<T extends Core> extends DataObject {

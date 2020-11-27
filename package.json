@@ -1,6 +1,6 @@
 {
   "name": "@openhps/sphero",
-  "version": "0.1.0-alpha.5",
+  "version": "0.1.0-alpha.12",
   "description": "Open Hybrid Positioning System - Sphero component",
   "author": "Maxim Van de Wynckel",
   "license": "Apache-2.0",
@@ -16,7 +16,8 @@
   "unpkg": "dist/openhps-sphero.min.js",
   "jsdelivr": "dist/openhps-sphero.min.js",
   "files": [
-    "lib/**/*",
+    "lib/web/dist/**/*",
+    "lib/server/lib/dist/**/*",
     "dist/**/*"
   ],
   "scripts": {
@@ -25,16 +26,16 @@
     "cover": "nyc mocha && nyc report --reporter=cobertura",
     "lint": "eslint src/**",
     "clean": "shx rm -rf ./dist && shx rm -rf ./docs",
-    "build": "npm run clean && npm-run-all --parallel build:typescript && npm run build:webpack",
+    "build": "npm run clean && npm run build:lib && npm run build:typescript && npm run build:webpack",
     "build:typescript": "tsc",
+    "build:lib": "npm-run-all --parallel build:lib:*",
+    "build:lib:web": "cd ./lib/web && npm install && tsc",
+    "build:lib:server": "cd ./lib/server/lib && npm install && tsc",
     "build:typedoc": "typedoc --exclude **/_internal/**/* --excludePrivate --hideGenerator --out docs src",
     "build:webpack": "webpack",
     "publish:development": "standard-version --prerelease alpha -m 'chore(alpha): %s' --author='ci <ci@openhps.org>' && npm publish --tag dev",
     "publish:beta": "standard-version --prerelease beta -m 'chore(beta): %s' --author='ci <ci@openhps.org>' && npm publish --tag beta",
-    "publish:release": "standard-version -m 'chore(release): %s' --author='ci <ci@openhps.org>' && npm publish --tag latest",
-    "preinstall": "npm run preinstall-server && npm run preinstall-web",
-    "preinstall-server": "cd ./lib/server/lib && npm install && tsc",
-    "preinstall-web": "cd ./lib/web && npm install && tsc"
+    "publish:release": "standard-version -m 'chore(release): %s' --author='ci <ci@openhps.org>' && npm publish --tag latest"
   },
   "keywords": [
     "openhps",
@@ -51,7 +52,8 @@
     "@commitlint/config-conventional": "^8.3.4",
     "@types/chai": "^4.2.14",
     "@types/mocha": "^5.2.7",
-    "@types/node": "^12.19.7",
+    "@types/node": "^12.12.56",
+    "@types/web-bluetooth": "0.0.9",
     "@typescript-eslint/eslint-plugin": "^3.10.1",
     "@typescript-eslint/parser": "^3.10.1",
     "chai": "^4.2.0",
