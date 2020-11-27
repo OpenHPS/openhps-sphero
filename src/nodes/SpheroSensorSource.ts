@@ -76,6 +76,7 @@ export class SpheroSensorSource<
 
         const spheroObject = this.source as SpheroDataObject<T>;
         const position = (spheroObject.getPosition() as Absolute2DPosition) || new Absolute2DPosition(0, 0);
+        position.timestamp = Date.now();
         if (this.options.sensors.includes(SpheroSensor.VELOCITY)) {
             position.velocity.linear = new LinearVelocity(
                 event.locator.velocity.x,

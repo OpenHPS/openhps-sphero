@@ -48,6 +48,7 @@ export class SpheroInputSource<
         return new Promise((resolve, reject) => {
             const spheroObject = this.source as SpheroDataObject<T>;
             const position = spheroObject.getPosition() || new Absolute2DPosition(0, 0);
+            position.timestamp = Date.now();
             position.orientation = Quaternion.fromEuler({ yaw: heading, pitch: 0, roll: 0, unit: AngleUnit.DEGREE });
             position.velocity.linear = new LinearVelocity(
                 // Sphero Mini top speed is 1m/s
