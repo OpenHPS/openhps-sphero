@@ -1,7 +1,6 @@
 import {
     SourceNode,
     LinearVelocity,
-    Absolute3DPosition,
     Absolute2DPosition,
     AngularVelocity,
     Quaternion,
@@ -42,15 +41,19 @@ export class SpheroSensorSource<
         return new Promise((resolve, reject) => {
             this.referenceSpace = new ReferenceSpace((this.graph as Model).referenceSpace);
             const spheroObject = this.source as SpheroDataObject<T>;
-            spheroObject.toy
-                .configureSensorStream(this.options.interval)
-                .then(() => {
-                    spheroObject.toy.on(Event.onSensor, this._onSensorEvent.bind(this));
-                    resolve();
-                })
-                .catch((ex) => {
-                    reject(ex);
-                });
+            spheroObject.toy.on(Event.onSensor, this._onSensorEvent.bind(this));
+            if (!this.options.skipSensorConfiguration) {
+                spheroObject.toy
+                    .configureSensorStream(this.options.interval)
+                    .then(() => {
+                        resolve();
+                    })
+                    .catch((ex) => {
+                        reject(ex);
+                    });
+            } else {
+                resolve();
+            }
         });
     }
 
@@ -72,29 +75,37 @@ export class SpheroSensorSource<
         }
 
         const spheroObject = this.source as SpheroDataObject<T>;
-        const position = spheroObject.getPosition() as Absolute3DPosition | Absolute2DPosition;
-        position.velocity.linear = new LinearVelocity(
-            event.locator.velocity.x,
-            event.locator.velocity.y,
-            0,
-            LinearVelocityUnit.CENTIMETER_PER_SECOND,
-        );
-        position.velocity.angular = new AngularVelocity(
-            event.gyro.filtered.x,
-            event.gyro.filtered.y,
-            event.gyro.filtered.z,
-            AngularVelocityUnit.DEGREE_PER_SECOND,
-        );
-        position.unit = LengthUnit.CENTIMETER;
-        position.x = event.locator.position.x;
-        position.y = event.locator.position.y;
-        position.orientation = Quaternion.fromEuler({
-            yaw: event.angles.yaw,
-            pitch: event.angles.pitch,
-            roll: event.angles.roll,
-            unit: AngleUnit.DEGREE,
-        });
+        const position = spheroObject.getPosition() as Absolute2DPosition;
+        if (this.options.sensors.includes(SpheroSensor.VELOCITY)) {
+            position.velocity.linear = new LinearVelocity(
+                event.locator.velocity.x,
+                event.locator.velocity.y,
+                0,
+                LinearVelocityUnit.CENTIMETER_PER_SECOND,
+            );
+        }
+        if (this.options.sensors.includes(SpheroSensor.GYROSCOPE)) {
+            position.velocity.angular = new AngularVelocity(
+                event.gyro.filtered.x,
+                event.gyro.filtered.y,
+                event.gyro.filtered.z,
+                AngularVelocityUnit.DEGREE_PER_SECOND,
+            );
+        }
+        if (this.options.sensors.includes(SpheroSensor.LOCATION)) {
+            position.unit = LengthUnit.CENTIMETER;
+            position.x = event.locator.position.x;
+            position.y = event.locator.position.y;
+            position.orientation = Quaternion.fromEuler({
+                yaw: event.angles.yaw,
+                pitch: event.angles.pitch,
+                roll: event.angles.roll,
+                unit: AngleUnit.DEGREE,
+            });
+        }
         spheroObject.setPosition(position, this.referenceSpace);
+
+        // Clone the information to the sphero data frame
         const frame = new SpheroDataFrame(spheroObject);
         frame.angularVelocity = position.velocity.angular.clone();
         frame.linearVelocity = position.velocity.linear.clone();
@@ -104,6 +115,8 @@ export class SpheroSensorSource<
             event.accelerometer.filtered.y,
             event.accelerometer.filtered.z,
         );
+        frame.x = position.x;
+        frame.y = position.y;
         const pushPromises: Array<Promise<void>> = [];
         this.outputNodes.forEach((node) => {
             pushPromises.push(node.push(frame));
@@ -131,6 +144,10 @@ export interface SpheroSensorOptions extends SourceNodeOptions {
      * Specify if the calibration should be skipped
      */
     skipCalibration?: boolean;
+    /**
+     * Specify if the sensor interval configuration should be skipped
+     */
+    skipSensorConfiguration?: boolean;
 }
 
 export enum SpheroSensor {
