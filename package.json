@@ -43,9 +43,7 @@
   ],
   "dependencies": {
     "@openhps/core": "0.1.0-alpha.85",
-    "reflect-metadata": ">=0.1.13",
-    "spherov2.js-server": "file://./lib/server/lib",
-    "spherov2.js-web": "file://./lib/web"
+    "reflect-metadata": ">=0.1.13"
   },
   "devDependencies": {
     "@commitlint/cli": "^8.3.5",
