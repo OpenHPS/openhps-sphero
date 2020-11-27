@@ -12,7 +12,7 @@ export const toPromise = (
       if (err) {
         reject(err);
       } else {
-        resolve(...retArgs);
+        resolve(retArgs);
       }
     });
   });

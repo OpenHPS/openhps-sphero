@@ -5,9 +5,7 @@ pipeline {
             steps {
                 echo 'Building ...'
                 sh 'npm install'
-                sh 'npm run clean'
-                sh 'npm run build:typescript'
-                sh 'npm run build:webpack'
+                sh 'npm run build'
             }
         }
         stage('Quality') {

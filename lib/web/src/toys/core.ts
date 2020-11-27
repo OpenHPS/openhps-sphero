@@ -213,7 +213,7 @@ export class Core {
       this.server = await this.peripheral.gatt.connect();
       await this.bindServices();
       this.bindListeners();
-      resolve();
+      resolve(undefined);
     });
   }
 
