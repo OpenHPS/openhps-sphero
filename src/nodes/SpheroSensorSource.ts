@@ -49,9 +49,7 @@ export class SpheroSensorSource<
                     .then(() => {
                         resolve();
                     })
-                    .catch((ex) => {
-                        reject(ex);
-                    });
+                    .catch(reject);
             } else {
                 resolve();
             }
@@ -78,6 +76,7 @@ export class SpheroSensorSource<
         const spheroObject = this.source as SpheroDataObject<T>;
         const position = (spheroObject.getPosition() as Absolute2DPosition) || new Absolute2DPosition(0, 0);
         position.timestamp = TimeService.now();
+        position.unit = LengthUnit.CENTIMETER;
         if (this.options.sensors.includes(SpheroSensor.VELOCITY)) {
             position.velocity.linear = new LinearVelocity(
                 event.locator.velocity.x,
@@ -119,11 +118,7 @@ export class SpheroSensorSource<
         );
         frame.x = position.x;
         frame.y = position.y;
-        const pushPromises: Array<Promise<void>> = [];
-        this.outputNodes.forEach((node) => {
-            pushPromises.push(node.push(frame));
-        });
-        Promise.all(pushPromises);
+        this.push(frame as Out);
     }
 
     public onPull(): Promise<Out> {

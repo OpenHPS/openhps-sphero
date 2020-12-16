@@ -60,8 +60,8 @@ pipeline {
                 reportFiles: '*.*',
                 reportName: "Documentation"
             ])
-            archiveArtifacts artifacts: 'dist/openhps-sphero.js', fingerprint: true
-            archiveArtifacts artifacts: 'dist/openhps-sphero.min.js', fingerprint: true
+            archiveArtifacts artifacts: 'dist/web/openhps-sphero.js', fingerprint: true
+            archiveArtifacts artifacts: 'dist/web/openhps-sphero.min.js', fingerprint: true
             deleteDir()
         }
     }

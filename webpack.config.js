@@ -4,10 +4,10 @@ const path = require('path');
 
 module.exports = [{
   mode: 'development',
-  entry: './dist/index.js',
+  entry: './dist/cjs/index.js',
   devtool: 'source-map',
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'dist/web'),
     filename: 'openhps-sphero.js',
     library: '@openhps/sphero',
     libraryTarget: 'umd',
@@ -16,8 +16,8 @@ module.exports = [{
   },
   resolve: {
     alias: {
-      "../../../lib/server/dist": "../../../lib/web/dist",
-      "../../lib/server/dist": "../../lib/web/dist",
+      "../../../lib/server/lib/dist": "../../../../lib/web/dist",
+      "../../lib/server/lib/dist": "../../../lib/web/dist",
     }
   },
   externals: {
@@ -25,7 +25,7 @@ module.exports = [{
   },
 },{
   mode: 'production',
-  entry: './dist/index.js',
+  entry: './dist/cjs/index.js',
   devtool: 'source-map',
   optimization: {
     minimize: true,
@@ -40,15 +40,15 @@ module.exports = [{
   },
   resolve: {
     alias: {
-      "spherov2.js-server": path.resolve(__dirname, 'lib/web/dist'),
-      "spherov2.js-web": path.resolve(__dirname, 'lib/web/dist')
+      "../../../lib/server/lib/dist": "../../../../lib/web/dist",
+      "../../lib/server/lib/dist": "../../../lib/web/dist",
     }
   },
   externals: {
     "@openhps/core": "@openhps/core"
   },
   output: {
-    path: path.resolve(__dirname, 'dist'),
+    path: path.resolve(__dirname, 'dist/web'),
     filename: 'openhps-sphero.min.js',
     library: '@openhps/sphero',
     libraryTarget: 'umd',

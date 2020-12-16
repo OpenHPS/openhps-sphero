@@ -7,6 +7,7 @@ import {
     LinearVelocityUnit,
     Absolute2DPosition,
     TimeService,
+    LengthUnit,
 } from '@openhps/core';
 import { SpheroDataObject, SpheroDataFrame } from '../data';
 import { RollableToy } from '../../lib/server/lib/dist';
@@ -16,22 +17,8 @@ export class SpheroInputSource<
     Out extends SpheroDataFrame,
     T extends RollableToy = RollableToy
 > extends SourceNode<Out> {
-    constructor(source?: SpheroDataObject<T>) {
+    constructor(source: SpheroDataObject<T>) {
         super(source);
-        if (!source) {
-            this.once('build', this._connect.bind(this));
-        }
-    }
-
-    private _connect(): Promise<void> {
-        return new Promise((resolve, reject) => {
-            SpheroDataObject.findSpheroMini()
-                .then((object) => {
-                    this.source = object;
-                    resolve();
-                })
-                .catch(reject);
-        });
     }
 
     public get toy(): RollableToy {
@@ -49,6 +36,7 @@ export class SpheroInputSource<
         return new Promise((resolve, reject) => {
             const spheroObject = this.source as SpheroDataObject<T>;
             const position = spheroObject.getPosition() || new Absolute2DPosition(0, 0);
+            position.unit = LengthUnit.CENTIMETER;
             position.timestamp = TimeService.now();
             position.orientation = Quaternion.fromEuler({ yaw: heading, pitch: 0, roll: 0, unit: AngleUnit.DEGREE });
             position.velocity.linear = new LinearVelocity(
@@ -60,17 +48,12 @@ export class SpheroInputSource<
                 LinearVelocityUnit.METER_PER_SECOND,
             );
             spheroObject.setPosition(position);
+
             const frame = new SpheroDataFrame(spheroObject);
-
-            const pushPromises: Array<Promise<void>> = [];
-            this.outputNodes.forEach((node) => {
-                pushPromises.push(node.push(frame));
-            });
-
             spheroObject.toy
                 .roll(speed, heading, flags)
                 .then(() => {
-                    return Promise.all(pushPromises);
+                    return this.push(frame as Out);
                 })
                 .then(() => {
                     setTimeout(() => {
