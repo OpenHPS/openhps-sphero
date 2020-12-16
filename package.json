@@ -49,7 +49,7 @@
     "openhps",
     "sphero"
   ],
-  "dependencies": {
+  "peerDependencies": {
     "@openhps/core": ">=0.2.0-alpha.3",
     "reflect-metadata": ">=0.1.13"
   },
