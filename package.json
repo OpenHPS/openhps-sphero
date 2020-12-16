@@ -11,13 +11,11 @@
   "publishConfig": {
     "access": "public"
   },
-  "main": "./dist/cjs/index.js",
+  "main": "./dist/index.js",
   "type": "commonjs",
-  "types": "./dist/cjs/index.d.ts",
-  "module": "./dist/esm/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
-    "require": "./dist/cjs/index.js",
-    "import": "./dist/esm/index.js"
+    "require": "./dist/index.js"
   },
   "unpkg": "dist/web/openhps-sphero.min.js",
   "jsdelivr": "dist/web/openhps-sphero.min.js",
@@ -35,9 +33,9 @@
     "cover": "nyc mocha && nyc report --reporter=cobertura",
     "lint": "eslint src/**",
     "clean": "shx rm -rf ./dist && shx rm -rf ./docs",
-    "build": "npm run clean && npm run build:lib && npm-run-all --parallel build:esm build:cjs && npm run build:webpack",
+    "build": "npm run clean && npm run build:lib && npm-run-all --parallel build:cjs && npm run build:webpack",
     "build:esm": "tsc --module es2015 --outDir dist/esm",
-    "build:cjs": "tsc --module commonjs  --outDir dist/cjs",
+    "build:cjs": "tsc --module commonjs  --outDir dist",
     "build:lib": "npm-run-all --parallel build:lib:*",
     "build:lib:web": "cd ./lib/web && npm install && tsc",
     "build:lib:server": "cd ./lib/server/lib && npm install && tsc",

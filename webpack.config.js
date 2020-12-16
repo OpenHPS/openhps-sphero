@@ -4,7 +4,7 @@ const path = require('path');
 
 module.exports = [{
   mode: 'development',
-  entry: './dist/cjs/index.js',
+  entry: './dist/index.js',
   devtool: 'source-map',
   output: {
     path: path.resolve(__dirname, 'dist/web'),
@@ -16,8 +16,8 @@ module.exports = [{
   },
   resolve: {
     alias: {
-      "../../../lib/server/lib/dist": "../../../../lib/web/dist",
-      "../../lib/server/lib/dist": "../../../lib/web/dist",
+      "../../../lib/server/lib/dist": "../../../lib/web/dist",
+      "../../lib/server/lib/dist": "../../lib/web/dist",
     }
   },
   externals: {
@@ -25,7 +25,7 @@ module.exports = [{
   },
 },{
   mode: 'production',
-  entry: './dist/cjs/index.js',
+  entry: './dist/index.js',
   devtool: 'source-map',
   optimization: {
     minimize: true,
@@ -40,8 +40,8 @@ module.exports = [{
   },
   resolve: {
     alias: {
-      "../../../lib/server/lib/dist": "../../../../lib/web/dist",
-      "../../lib/server/lib/dist": "../../../lib/web/dist",
+      "../../../lib/server/lib/dist": "../../../lib/web/dist",
+      "../../lib/server/lib/dist": "../../lib/web/dist",
     }
   },
   externals: {

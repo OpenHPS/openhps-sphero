@@ -12,7 +12,7 @@
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "allowJs": true,
-        "skipLibCheck": true
+        "skipLibCheck": true,
     },
     "include": [
         "src/**/*",
