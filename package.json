@@ -39,7 +39,7 @@
     "build:lib": "npm-run-all --parallel build:lib:*",
     "build:lib:web": "cd ./lib/web && npm install && tsc",
     "build:lib:server": "cd ./lib/server/lib && npm install && tsc",
-    "build:typedoc": "typedoc --exclude **/_internal/**/* --excludePrivate --hideGenerator --out docs src",
+    "build:typedoc": "typedoc --options docs/typedoc.json",
     "build:webpack": "npm-run-all --parallel build:webpack:*",
     "build:webpack:dev": "webpack --env dev",
     "build:webpack:prod": "webpack --env prod",
