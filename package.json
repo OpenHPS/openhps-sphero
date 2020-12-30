@@ -32,7 +32,7 @@
     "test:jenkins": "jenkins-mocha --cobertura",
     "cover": "nyc mocha && nyc report --reporter=cobertura",
     "lint": "eslint src/**",
-    "clean": "shx rm -rf ./dist && shx rm -rf ./docs",
+    "clean": "shx rm -rf ./dist && shx rm -rf ./docs/out",
     "build": "npm run clean && npm run build:lib && npm-run-all --parallel build:cjs && npm run build:webpack",
     "build:esm": "tsc --module es2015 --outDir dist/esm",
     "build:cjs": "tsc --module commonjs  --outDir dist",
