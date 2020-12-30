@@ -40,7 +40,9 @@
     "build:lib:web": "cd ./lib/web && npm install && tsc",
     "build:lib:server": "cd ./lib/server/lib && npm install && tsc",
     "build:typedoc": "typedoc --exclude **/_internal/**/* --excludePrivate --hideGenerator --out docs src",
-    "build:webpack": "webpack",
+    "build:webpack": "npm-run-all --parallel build:webpack:*",
+    "build:webpack:dev": "webpack --env dev",
+    "build:webpack:prod": "webpack --env prod",
     "publish:development": "standard-version --prerelease alpha -m 'chore(alpha): %s' --author='ci <ci@openhps.org>' && npm publish --tag dev",
     "publish:beta": "standard-version --prerelease beta -m 'chore(beta): %s' --author='ci <ci@openhps.org>' && npm publish --tag beta",
     "publish:release": "standard-version -m 'chore(release): %s' --author='ci <ci@openhps.org>' && npm publish --tag latest"
@@ -56,8 +58,8 @@
   "devDependencies": {
     "@openhps/core": ">=0.2.0-alpha.3",
     "reflect-metadata": ">=0.1.13",
-    "@commitlint/cli": "^8.3.5",
-    "@commitlint/config-conventional": "^8.3.4",
+    "@commitlint/cli": "^11.0.0",
+    "@commitlint/config-conventional": "^11.0.0",
     "@types/chai": "^4.2.14",
     "@types/mocha": "^5.2.7",
     "@types/node": "^12.19.9",
@@ -81,9 +83,8 @@
     "ts-node": "^8.10.2",
     "typedoc": "^0.19.2",
     "typescript": "^4.1.3",
-    "webpack": "^4.44.2",
-    "webpack-auto-inject-version": "^1.2.2",
-    "webpack-cli": "^3.3.12"
+    "webpack": "^5.11.1",
+    "webpack-cli": "^4.3.0"
   },
   "nyc": {
     "branches": 50,
@@ -113,16 +114,11 @@
   "engines": {
     "node": ">=12.0.0"
   },
-  "config": {
-    "commitizen": {
-      "path": "cz-conventional-changelog"
-    }
-  },
   "husky": {
     "hooks": {
       "pre-commit": "npm run lint",
       "pre-push": "npm run test",
-      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS --no-verify"
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
     }
   }
 }

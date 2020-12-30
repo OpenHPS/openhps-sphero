@@ -56,12 +56,14 @@ pipeline {
                 allowMissing: false,
                 alwaysLinkToLastBuild: true,
                 keepAll: true,
-                reportDir: 'docs',
+                reportDir: 'docs/out',
                 reportFiles: '*.*',
                 reportName: "Documentation"
             ])
             archiveArtifacts artifacts: 'dist/web/openhps-sphero.js', fingerprint: true
+            archiveArtifacts artifacts: 'dist/web/openhps-sphero.js.map', fingerprint: true
             archiveArtifacts artifacts: 'dist/web/openhps-sphero.min.js', fingerprint: true
+            archiveArtifacts artifacts: 'dist/web/openhps-sphero.min.js.map', fingerprint: true
             deleteDir()
         }
     }
