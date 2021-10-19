@@ -13,6 +13,7 @@ import {
     LinearVelocityUnit,
     Acceleration,
     TimeService,
+    Orientation,
 } from '@openhps/core';
 import { SpheroDataObject, SpheroDataFrame } from '../data';
 import { RollableToy, Event } from '../../lib/server/lib/dist';
@@ -20,14 +21,14 @@ import { ISensorResponse } from '../../lib/web/dist';
 
 export class SpheroSensorSource<
     Out extends SpheroDataFrame,
-    T extends RollableToy = RollableToy
+    T extends RollableToy = RollableToy,
 > extends SourceNode<Out> {
     public referenceSpace: ReferenceSpace;
     private _calibrated = false;
     protected options: SpheroSensorOptions;
 
-    constructor(source?: SpheroDataObject<T>, options?: SpheroSensorOptions) {
-        super(source, options);
+    constructor(options?: SpheroSensorOptions<T>) {
+        super(options);
         this._calibrated = this.options.skipCalibration;
 
         this.once('build', this._initSensors.bind(this));
@@ -97,7 +98,7 @@ export class SpheroSensorSource<
             position.unit = LengthUnit.CENTIMETER;
             position.x = event.locator.position.x;
             position.y = event.locator.position.y;
-            position.orientation = Quaternion.fromEuler({
+            position.orientation = Orientation.fromEuler({
                 yaw: event.angles.yaw,
                 pitch: event.angles.pitch,
                 roll: event.angles.roll,
@@ -128,7 +129,8 @@ export class SpheroSensorSource<
     }
 }
 
-export interface SpheroSensorOptions extends SourceNodeOptions {
+export interface SpheroSensorOptions<T extends RollableToy = RollableToy> extends SourceNodeOptions {
+    source?: SpheroDataObject<T>;
     /**
      * Sensor refresh interval in miliseconds
      */

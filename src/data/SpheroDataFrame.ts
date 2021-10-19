@@ -1,5 +1,6 @@
-import { IMUDataFrame, SerializableMember, SerializableObject } from '@openhps/core';
+import { SerializableMember, SerializableObject } from '@openhps/core';
 import { SpheroDataObject } from './object';
+import { IMUDataFrame } from '@openhps/imu';
 
 @SerializableObject()
 export class SpheroDataFrame extends IMUDataFrame {
@@ -8,8 +9,8 @@ export class SpheroDataFrame extends IMUDataFrame {
     }
 
     @SerializableMember()
-    public x: number;
+    x: number;
 
     @SerializableMember()
-    public y: number;
+    y: number;
 }

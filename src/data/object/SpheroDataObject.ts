@@ -3,7 +3,7 @@ import { Core, SpheroMini, Scanner } from '../../../lib/server/lib/dist';
 
 @SerializableObject()
 export class SpheroDataObject<T extends Core> extends DataObject {
-    public toy: T;
+    toy: T;
 
     constructor(toy: T, uid?: string, displayName?: string) {
         super(uid, displayName);

@@ -1,6 +1,5 @@
 import {
     SourceNode,
-    Quaternion,
     AngleUnit,
     LinearVelocity,
     TimeUnit,
@@ -8,6 +7,7 @@ import {
     Absolute2DPosition,
     TimeService,
     LengthUnit,
+    Orientation,
 } from '@openhps/core';
 import { SpheroDataObject, SpheroDataFrame } from '../data';
 import { RollableToy } from '../../lib/server/lib/dist';
@@ -15,7 +15,7 @@ import { DriveFlag } from '../../lib/web/dist';
 
 export class SpheroInputSource<
     Out extends SpheroDataFrame,
-    T extends RollableToy = RollableToy
+    T extends RollableToy = RollableToy,
 > extends SourceNode<Out> {
     constructor(source: SpheroDataObject<T>) {
         super(source);
@@ -38,7 +38,7 @@ export class SpheroInputSource<
             const position = spheroObject.getPosition() || new Absolute2DPosition(0, 0);
             position.unit = LengthUnit.CENTIMETER;
             position.timestamp = TimeService.now();
-            position.orientation = Quaternion.fromEuler({ yaw: heading, pitch: 0, roll: 0, unit: AngleUnit.DEGREE });
+            position.orientation = Orientation.fromEuler({ yaw: heading, pitch: 0, roll: 0, unit: AngleUnit.DEGREE });
             position.velocity.linear = new LinearVelocity(
                 // Sphero Mini top speed is 1m/s
                 // https://support.sphero.com/article/6drb2qggx4-sphero-mini-faq#:~:text=How%20fast%20is%20Sphero%20Mini,of%201%20meter%20per%20second.
