@@ -12,6 +12,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Build Web Library
+        working-directory: ./lib/web
+        run: |
+          npm install -g typescript
+          npm install
+          tsc
+      - name: Build Web Library
+        working-directory: ./lib/server/lib
+        run: |
+          npm install
+          tsc
       - name: Build
         run: |
           npm install
