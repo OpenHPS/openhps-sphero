@@ -53,14 +53,14 @@
     "sphero"
   ],
   "peerDependencies": {
-    "@openhps/core": ">=0.3.2-alpha.0",
+    "@openhps/core": ">=0.3.13",
     "reflect-metadata": ">=0.1.13",
     "@openhps/imu": ">=0.1.0"
   },
   "devDependencies": {
     "@commitlint/cli": "^13.2.1",
     "@commitlint/config-conventional": "^13.2.0",
-    "@openhps/core": ">=0.3.2-alpha.0",
+    "@openhps/core": ">=0.3.13",
     "@openhps/imu": "0.1.0",
     "@types/chai": "^4.2.22",
     "@types/mocha": "^9.0.0",
