@@ -33,17 +33,17 @@ jobs:
           key: ${{ runner.os }}-build-v1-${{ hashFiles('**/package-lock.json') }}-${{ github.run_number }}
       - name: Installing dependencies
         run: |
-          npm install
+          npm install --no-save
       - name: Build Web Library
         working-directory: ./lib/web
         run: |
           npm install -g typescript
-          npm install
+          npm install --no-save
           tsc
       - name: Build Server Library
         working-directory: ./lib/server/lib
         run: |
-          npm install
+          npm install --no-save
           tsc
       - name: Build
         run: |
