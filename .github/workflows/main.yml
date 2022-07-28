@@ -20,13 +20,15 @@ jobs:
         with:
           path: |
             **/node_modules
+            **/lib/server/lib/node_modules
+            **/lib/web/node_modules
           key: ${{ runner.os }}-dependencies-v1-${{ hashFiles('**/package-lock.json') }}
       - name: Load build cache
         uses: actions/cache@v2
         with:
           path: |
             **/dist
-            **/lib/server/dist
+            **/lib/server/lib/dist
             **/lib/web/dist
           key: ${{ runner.os }}-build-v1-${{ hashFiles('**/package-lock.json') }}-${{ github.run_number }}
       - name: Build Web Library
@@ -67,13 +69,15 @@ jobs:
         with:
           path: |
             **/node_modules
+            **/lib/server/lib/node_modules
+            **/lib/web/node_modules
           key: ${{ runner.os }}-dependencies-v1-${{ hashFiles('**/package-lock.json') }}
       - name: Load build cache
         uses: actions/cache@v2
         with:
           path: |
             **/dist
-            **/lib/server/dist
+            **/lib/server/lib/dist
             **/lib/web/dist
           key: ${{ runner.os }}-build-v1-${{ hashFiles('**/package-lock.json') }}-${{ github.run_number }}
       - name: Quality
@@ -93,13 +97,15 @@ jobs:
         with:
           path: |
             **/node_modules
+            **/lib/server/lib/node_modules
+            **/lib/web/node_modules
           key: ${{ runner.os }}-dependencies-v1-${{ hashFiles('**/package-lock.json') }}
       - name: Load build cache
         uses: actions/cache@v2
         with:
           path: |
             **/dist
-            **/lib/server/dist
+            **/lib/server/lib/dist
             **/lib/web/dist
           key: ${{ runner.os }}-build-v1-${{ hashFiles('**/package-lock.json') }}-${{ github.run_number }}
       - name: Load document cache
@@ -155,13 +161,15 @@ jobs:
         with:
           path: |
             **/node_modules
+            **/lib/server/lib/node_modules
+            **/lib/web/node_modules
           key: ${{ runner.os }}-dependencies-v1-${{ hashFiles('**/package-lock.json') }}
       - name: Load build cache
         uses: actions/cache@v2
         with:
           path: |
             **/dist
-            **/lib/server/dist
+            **/lib/server/lib/dist
             **/lib/web/dist
           key: ${{ runner.os }}-build-v1-${{ hashFiles('**/package-lock.json') }}-${{ github.run_number }}
       - name: Configure Publish
@@ -197,13 +205,15 @@ jobs:
         with:
           path: |
             **/node_modules
+            **/lib/server/lib/node_modules
+            **/lib/web/node_modules
           key: ${{ runner.os }}-dependencies-v1-${{ hashFiles('**/package-lock.json') }}
       - name: Load build cache
         uses: actions/cache@v2
         with:
           path: |
             **/dist
-            **/lib/server/dist
+            **/lib/server/lib/dist
             **/lib/web/dist
           key: ${{ runner.os }}-build-v1-${{ hashFiles('**/package-lock.json') }}-${{ github.run_number }}
       - name: Configure Publish
