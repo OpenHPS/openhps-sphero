@@ -26,7 +26,8 @@ jobs:
         with:
           path: |
             **/dist
-            **/lib
+            **/lib/server/dist
+            **/lib/web/dist
           key: ${{ runner.os }}-build-v1-${{ hashFiles('**/package-lock.json') }}-${{ github.run_number }}
       - name: Build Web Library
         working-directory: ./lib/web
@@ -72,7 +73,8 @@ jobs:
         with:
           path: |
             **/dist
-            **/lib
+            **/lib/server/dist
+            **/lib/web/dist
           key: ${{ runner.os }}-build-v1-${{ hashFiles('**/package-lock.json') }}-${{ github.run_number }}
       - name: Quality
         run: |
@@ -97,7 +99,8 @@ jobs:
         with:
           path: |
             **/dist
-            **/lib
+            **/lib/server/dist
+            **/lib/web/dist
           key: ${{ runner.os }}-build-v1-${{ hashFiles('**/package-lock.json') }}-${{ github.run_number }}
       - name: Load document cache
         uses: actions/cache@v2
@@ -158,7 +161,8 @@ jobs:
         with:
           path: |
             **/dist
-            **/lib
+            **/lib/server/dist
+            **/lib/web/dist
           key: ${{ runner.os }}-build-v1-${{ hashFiles('**/package-lock.json') }}-${{ github.run_number }}
       - name: Configure Publish
         run: |
@@ -199,7 +203,8 @@ jobs:
         with:
           path: |
             **/dist
-            **/lib
+            **/lib/server/dist
+            **/lib/web/dist
           key: ${{ runner.os }}-build-v1-${{ hashFiles('**/package-lock.json') }}-${{ github.run_number }}
       - name: Configure Publish
         run: |
