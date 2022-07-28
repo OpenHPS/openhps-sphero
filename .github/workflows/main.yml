@@ -23,6 +23,9 @@ jobs:
             **/lib/server/lib/node_modules
             **/lib/web/node_modules
           key: ${{ runner.os }}-dependencies-v1-${{ hashFiles('**/package-lock.json') }}
+      - name: Installing dependencies
+        run: |
+          npm install
       - name: Load build cache
         uses: actions/cache@v2
         with:
@@ -42,9 +45,6 @@ jobs:
         run: |
           npm install
           tsc
-      - name: Installing dependencies
-        run: |
-          npm install
       - name: Build
         run: |
           npm run build
