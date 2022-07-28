@@ -23,9 +23,6 @@ jobs:
             **/lib/server/lib/node_modules
             **/lib/web/node_modules
           key: ${{ runner.os }}-dependencies-v1-${{ hashFiles('**/package-lock.json') }}
-      - name: Installing dependencies
-        run: |
-          npm install
       - name: Load build cache
         uses: actions/cache@v2
         with:
@@ -34,6 +31,9 @@ jobs:
             **/lib/server/lib/dist
             **/lib/web/dist
           key: ${{ runner.os }}-build-v1-${{ hashFiles('**/package-lock.json') }}-${{ github.run_number }}
+      - name: Installing dependencies
+        run: |
+          npm install
       - name: Build Web Library
         working-directory: ./lib/web
         run: |
