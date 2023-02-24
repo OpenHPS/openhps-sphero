@@ -14,6 +14,10 @@ import {
     Acceleration,
     TimeService,
     Orientation,
+    Gyroscope,
+    LinearAccelerationSensor,
+    RelativeOrientationSensor,
+    LinearVelocitySensor,
 } from '@openhps/core';
 import { SpheroDataObject, SpheroDataFrame } from '../data';
 import { RollableToy, Event } from '../../lib/server/lib/dist';
@@ -109,10 +113,14 @@ export class SpheroSensorSource<
 
         // Clone the information to the sphero data frame
         const frame = new SpheroDataFrame(spheroObject);
-        frame.angularVelocity = position.velocity.angular.clone();
-        frame.linearVelocity = position.velocity.linear.clone();
-        frame.relativeOrientation = position.orientation.clone();
-        frame.linearAcceleration = new Acceleration(
+        const angularVelocity = new Gyroscope(this.uid + '_gyro');
+        angularVelocity.value = position.velocity.angular.clone();
+        const linearVelocity = new LinearVelocitySensor(this.uid + '_linearvel');
+        linearVelocity.value = position.velocity.linear.clone();
+        const relativeOrientation = new RelativeOrientationSensor(this.uid + '_relativeorientation');
+        relativeOrientation.value = position.orientation.clone();
+        const linearAcceleration = new LinearAccelerationSensor(this.uid + '_linearaccl');
+        linearAcceleration.value = new Acceleration(
             event.accelerometer.filtered.x,
             event.accelerometer.filtered.y,
             event.accelerometer.filtered.z,
