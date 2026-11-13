@@ -20,7 +20,7 @@ import {
     LinearVelocitySensor,
 } from '@openhps/core';
 import { SpheroDataObject, SpheroDataFrame } from '../data';
-import { RollableToy, Event } from '../../lib/server/lib/dist';
+import { RollableToy, Event, ICommandWithRaw } from '../../lib/server/lib/dist';
 import { ISensorResponse } from '../../lib/web/dist';
 
 export class SpheroSensorSource<
@@ -29,13 +29,16 @@ export class SpheroSensorSource<
 > extends SourceNode<Out> {
     public referenceSpace: ReferenceSpace;
     private _calibrated = false;
+    private _onSensorEventHandler?: (command: ICommandWithRaw) => void;
     protected options: SpheroSensorOptions;
 
     constructor(options?: SpheroSensorOptions<T>) {
         super(options);
+        this.options.sensors = this.options.sensors ?? (Object.values(SpheroSensor) as SpheroSensor[]);
         this._calibrated = this.options.skipCalibration;
 
         this.once('build', this._initSensors.bind(this));
+        this.once('destroy', this._uninitSensors.bind(this));
     }
 
     public get toy(): RollableToy {
@@ -45,9 +48,10 @@ export class SpheroSensorSource<
 
     private _initSensors(): Promise<void> {
         return new Promise((resolve, reject) => {
-            this.referenceSpace = new ReferenceSpace((this.graph as Model).referenceSpace);
+            this.referenceSpace = new ReferenceSpace(this.graph ? (this.graph as Model).referenceSpace : undefined);
             const spheroObject = this.source as SpheroDataObject<T>;
-            spheroObject.toy.on(Event.onSensor, this._onSensorEvent.bind(this));
+            this._onSensorEventHandler = this._onSensorEvent.bind(this) as (command: ICommandWithRaw) => void;
+            spheroObject.toy.on(Event.onSensor, this._onSensorEventHandler);
             if (!this.options.skipSensorConfiguration) {
                 spheroObject.toy
                     .configureSensorStream(this.options.interval)
@@ -74,7 +78,6 @@ export class SpheroSensorSource<
             );
             // Start origin should be (0, 0)
             this.referenceSpace.translation(-event.locator.position.x, -event.locator.position.y);
-            // Apply axis rotation to match OpenHPS
             this._calibrated = true;
         }
 
@@ -113,21 +116,43 @@ export class SpheroSensorSource<
 
         // Clone the information to the sphero data frame
         const frame = new SpheroDataFrame(spheroObject);
-        const angularVelocity = new Gyroscope(this.uid + '_gyro');
-        angularVelocity.value = position.velocity.angular.clone();
-        const linearVelocity = new LinearVelocitySensor(this.uid + '_linearvel');
-        linearVelocity.value = position.velocity.linear.clone();
-        const relativeOrientation = new RelativeOrientationSensor(this.uid + '_relativeorientation');
-        relativeOrientation.value = position.orientation.clone();
-        const linearAcceleration = new LinearAccelerationSensor(this.uid + '_linearaccl');
-        linearAcceleration.value = new Acceleration(
-            event.accelerometer.filtered.x,
-            event.accelerometer.filtered.y,
-            event.accelerometer.filtered.z,
-        );
+        if (this.options.sensors.includes(SpheroSensor.GYROSCOPE) && position.velocity.angular) {
+            const angularVelocity = new Gyroscope(this.uid + '_gyro');
+            angularVelocity.value = position.velocity.angular.clone();
+            frame.addSensor(angularVelocity);
+        }
+        if (this.options.sensors.includes(SpheroSensor.VELOCITY) && position.velocity.linear) {
+            const linearVelocity = new LinearVelocitySensor(this.uid + '_linearvel');
+            linearVelocity.value = position.velocity.linear.clone();
+            frame.addSensor(linearVelocity);
+        }
+        if (this.options.sensors.includes(SpheroSensor.LOCATION) && position.orientation) {
+            const relativeOrientation = new RelativeOrientationSensor(this.uid + '_relativeorientation');
+            relativeOrientation.value = position.orientation.clone();
+            frame.addSensor(relativeOrientation);
+        }
+        if (this.options.sensors.includes(SpheroSensor.ACCELEROMETER) && event.accelerometer) {
+            const linearAcceleration = new LinearAccelerationSensor(this.uid + '_linearaccl');
+            linearAcceleration.value = new Acceleration(
+                event.accelerometer.filtered.x,
+                event.accelerometer.filtered.y,
+                event.accelerometer.filtered.z,
+            );
+            frame.addSensor(linearAcceleration);
+        }
         frame.x = position.x;
         frame.y = position.y;
-        this.push(frame as Out);
+        this.push(frame as Out).catch((ex) => this.logger('error', 'Unable to push sensor frame', ex));
+    }
+
+    private _uninitSensors(): void {
+        const spheroObject = this.source as SpheroDataObject<T>;
+        if (spheroObject && this._onSensorEventHandler) {
+            // Core.on() keeps a single handler per event, so overwriting it with
+            // undefined detaches the sensor event listener from the toy
+            spheroObject.toy.on(Event.onSensor, undefined as any);
+            this._onSensorEventHandler = undefined;
+        }
     }
 
     public onPull(): Promise<Out> {

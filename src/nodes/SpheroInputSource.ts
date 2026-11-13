@@ -71,16 +71,18 @@ export class SpheroInputSource<
         timeUnit: TimeUnit,
         flags: DriveFlag[] = [],
     ): Promise<void> {
-        // eslint-disable-next-line
-        return new Promise(async (resolve, reject) => {
+        return new Promise((resolve, reject) => {
             let driving = true;
             setTimeout(() => (driving = false), timeUnit.convert(time, TimeUnit.MILLISECOND));
 
-            while (driving) {
-                await this.roll(speed, heading, flags);
-            }
+            const drive = async () => {
+                while (driving) {
+                    await this.roll(speed, heading, flags);
+                }
+                await this.roll(0, heading, flags);
+            };
 
-            this.roll(0, heading, flags)
+            drive()
                 .then(() => {
                     resolve();
                 })
